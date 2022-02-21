@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rancher
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cattle-system
+  project: default
+  source:
+    chart: rancher
+    helm:
+      values: |
+        hostname: rancher.dev.o527.net
+        replicas: 2
+    repoURL: https://releases.rancher.com/server-charts/stable
+    targetRevision: v2.5.9
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
